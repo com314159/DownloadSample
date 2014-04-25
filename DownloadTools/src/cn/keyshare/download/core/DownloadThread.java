@@ -187,11 +187,13 @@ public class DownloadThread extends Thread {
 			}
 			finalizeDestinationFile(state);
 			finalStatus = Downloads.STATUS_SUCCESS;
-			
+
 		} catch (StopRequest error) {
 			// remove the cause before printing, in case it contains PII
 			Log.w(Constants.TAG, "Aborting request for download " + mInfo.mId
-					+ ": "+ "  final status is " + error.mFinalStatus + " fileName is " + mInfo.mFileName + " download title is " + mInfo.mTitle  + error.getMessage());
+					+ ": " + "  final status is " + error.mFinalStatus
+					+ " fileName is " + mInfo.mFileName + " download title is "
+					+ mInfo.mTitle + error.getMessage());
 			finalStatus = error.mFinalStatus;
 			// fall through to finally block
 		} catch (Throwable ex) { // sometimes the socket code throws unchecked
@@ -310,11 +312,13 @@ public class DownloadThread extends Thread {
 						+ " for " + mInfo.mUri);
 			}
 
-			//如果持续检测外置sd卡，效率太低了。如果写出外置sd卡时，外置sd卡拔出，程序将退出
-//			if(!MediaMountedCached.getInstance().isSecondExternalMediaMountedCache(state.mFilename)){
-//				throw new StopRequest(Downloads.STATUS_WAITING_FOR_STORAGE_DEVICE, " media not mounted during write file");
-//			}
-			
+			// 如果持续检测外置sd卡，效率太低了。如果写出外置sd卡时，外置sd卡拔出，程序将退出
+			// if(!MediaMountedCached.getInstance().isSecondExternalMediaMountedCache(state.mFilename)){
+			// throw new
+			// StopRequest(Downloads.STATUS_WAITING_FOR_STORAGE_DEVICE,
+			// " media not mounted during write file");
+			// }
+
 			checkPausedOrCanceled(state);
 		}
 	}
@@ -622,9 +626,8 @@ public class DownloadThread extends Thread {
 
 		readResponseHeaders(state, innerState, response);
 		checkDownloadType(state);
-		
-		
-		//防止一个两个线程产生相同的文件名,如果一个线程a得到a.txt,没有写入文件,线程b发现没有a.txt在文件中,也可能产生a.txt,所以必须加这个同步
+
+		// 防止一个两个线程产生相同的文件名,如果一个线程a得到a.txt,没有写入文件,线程b发现没有a.txt在文件中,也可能产生a.txt,所以必须加这个同步
 		synchronized (DownloadThread.class) {
 			try {
 				state.mFilename = Helpers
@@ -924,6 +927,10 @@ public class DownloadThread extends Thread {
 							"Trying to resume a download that can't be resumed");
 				} else {
 					// All right, we'll be able to resume this download
+					if (mInfo.mTotalBytes == fileLength) {
+						throw new StopRequest(Downloads.STATUS_SUCCESS,
+								" don't need resumed download, the download is success");
+					}
 					try {
 						state.mStream = new FileOutputStream(state.mFilename,
 								true);
@@ -979,12 +986,12 @@ public class DownloadThread extends Thread {
 		if (Downloads.isStatusCompleted(status)) {
 			mInfo.sendIntentIfRequested();
 		}
-		if(Downloads.isStatusSuccess(status)){
+		if (Downloads.isStatusSuccess(status)) {
 			Intent intent = new Intent(Constants.ACTION_DOWNLOAD_JUST_SUCCESS);
-			
-	    	Bundle bundle = new Bundle();
-	    	bundle.putLong(Constants.KEY＿ID, mInfo.mId);
-	    	intent.putExtras(bundle);
+
+			Bundle bundle = new Bundle();
+			bundle.putLong(Constants.KEY＿ID, mInfo.mId);
+			intent.putExtras(bundle);
 			mContext.sendBroadcast(intent);
 		}
 	}
