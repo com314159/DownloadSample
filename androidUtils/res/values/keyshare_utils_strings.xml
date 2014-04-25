@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="keyshare_utils_byteShort">B</string>
+    <string name="keyshare_utils_kilobyteShort">KB</string>
+    <string name="keyshare_utils_megabyteShort">MB</string>
+    <string name="keyshare_utils_gigabyteShort">GB</string>
+    <string name="keyshare_utils_terabyteShort">TB</string>
+    <string name="keyshare_utils_petabyteShort">PB</string>
+    <string name="keyshare_utils_fileSizeSuffix">%1$s %2$s</string>
+
+</resources>

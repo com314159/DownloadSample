@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cn.keyshare.downloadtools"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="18" />
+
+    <!-- Allows access to the Download Manager -->
+    <permission
+        android:name="com.mozillaonline.permission.ACCESS_DOWNLOAD_MANAGER"
+        android:description="@string/keyshare_download_permdesc_downloadManager"
+        android:label="@string/keyshare_download_permlab_downloadManager"
+        android:protectionLevel="normal" />
+
+    <!-- Allows advanced access to the Download Manager -->
+    <permission
+        android:name="com.mozillaonline.permission.ACCESS_DOWNLOAD_MANAGER_ADVANCED"
+        android:description="@string/keyshare_download_permdesc_downloadManagerAdvanced"
+        android:label="@string/keyshare_download_permlab_downloadManagerAdvanced"
+        android:protectionLevel="normal" />
+
+    <!-- Allows to send broadcasts on download completion -->
+    <permission
+        android:name="com.mozillaonline.permission.SEND_DOWNLOAD_COMPLETED_INTENTS"
+        android:description="@string/keyshare_download_permdesc_downloadCompletedIntent"
+        android:label="@string/keyshare_download_permlab_downloadCompletedIntent"
+        android:protectionLevel="normal" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.mozillaonline.permission.ACCESS_DOWNLOAD_MANAGER" />
+    <uses-permission android:name="com.mozillaonline.permission.ACCESS_DOWNLOAD_MANAGER_ADVANCED" />
+    <uses-permission android:name="com.mozillaonline.permission.SEND_DOWNLOAD_COMPLETED_INTENTS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+         >
+        <activity android:name="cn.keyshare.download.core.SizeLimitActivity" >
+        </activity>
+
+        <service android:name="cn.keyshare.download.core.DownloadService" >
+        </service>
+
+        <receiver
+            android:name="cn.keyshare.download.core.DownloadReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.MEDIA_MOUNTED"></action>
+                <data android:scheme="file"/>
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>
