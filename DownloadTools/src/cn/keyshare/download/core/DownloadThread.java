@@ -927,6 +927,7 @@ public class DownloadThread extends Thread {
 							"Trying to resume a download that can't be resumed");
 				} else {
 					// All right, we'll be able to resume this download
+					//当DownloadService查询到此下载为正在下载，但是DownloadThread正好此时结束，这时，DownloadService又会重新开启一个线程下载，这个就是为了处理种情况
 					if (mInfo.mTotalBytes == fileLength) {
 						throw new StopRequest(Downloads.STATUS_SUCCESS,
 								" don't need resumed download, the download is success");
