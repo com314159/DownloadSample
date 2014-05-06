@@ -523,8 +523,7 @@ public class Helpers {
 		String fullFilename = filename + extension;// 下载完成后的文件名
 		String tempFullFilename = filename + extension
 				+ Constants.TEMP_FILE_EXTENTION;// 下载的临时文件名
-		if (!new File(tempFullFilename).exists()
-				&& !new File(fullFilename).exists() && !recoveryDir) {
+		if (isFileNameCanUse(fullFilename, tempFullFilename) && !recoveryDir) {
 			return fullFilename;
 		}
 		filename = filename + Constants.FILENAME_SEQUENCE_SEPARATOR;
@@ -544,8 +543,7 @@ public class Helpers {
 			for (int iteration = 0; iteration < 9; ++iteration) {
 				fullFilename = filename + sequence + extension;
 				tempFullFilename = fullFilename + Constants.TEMP_FILE_EXTENTION;
-				if (!new File(tempFullFilename).exists()
-						&& !new File(fullFilename).exists()) {
+				if (isFileNameCanUse(fullFilename, tempFullFilename)) {
 					return fullFilename;
 				}
 				if (Constants.LOGVV) {
@@ -559,6 +557,12 @@ public class Helpers {
 				"failed to generate an unused filename on internal download storage");
 	}
 
+	
+    private static boolean isFileNameCanUse(String fullFileName,String tempFileName){
+    	return (!new File(fullFileName).exists()&&!DownloadDataEngine.getInstance().isFileNameInUse(fullFileName))
+    			&&(!new File(tempFileName).exists()&&!DownloadDataEngine.getInstance().isFileNameInUse(tempFileName));
+    }
+	
 	/**
 	 * Returns whether the network is available
 	 */

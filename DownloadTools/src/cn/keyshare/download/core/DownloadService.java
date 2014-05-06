@@ -253,6 +253,8 @@ public class DownloadService extends Service {
 		    DownloadInfo.removeIdIfExist(id);
 		}
 
+		DownloadDataEngine.getInstance().setDownloadData(mDownloads);
+		
 		// is there a need to start the DownloadService? yes, if there
 		// are rows to be deleted.
 
